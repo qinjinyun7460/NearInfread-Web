@@ -1,7 +1,7 @@
 <template>
   <el-card shadow="hover" class="table-card">
     <el-table :data="sampleList" border stripe :loading="tableLoading" :empty-text="tableLoading ? '加载中...' : '暂无样品数据'"
-      @sort-change="handleSortChange" height="750" style="width: 100%">
+      @sort-change="handleSortChange" max-height="700" style="width: 100%">
       <el-table-column label="样品ID" prop="sample_id" align="center" sortable />
       <el-table-column label="用户ID" prop="user_id" align="center" sortable />
 
@@ -132,12 +132,14 @@ const handleDetect = (row) => {
 <style scoped>
 .table-card {
   background-color: #fff;
+  margin-bottom: 20px;
 }
 
 .pagination-container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 16px;
 }
 
 .text-ellipsis {

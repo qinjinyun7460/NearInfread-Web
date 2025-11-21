@@ -163,7 +163,7 @@ const handleTabClick = (tab) => {
     router.push(targetPath);
   }
 };
-
+    
 watch(
   () => route.path,
   (newPath) => {
@@ -205,7 +205,7 @@ watch(
 
 .page-tabs {
   margin-top: 16px;
-  height: calc(100vh - 140px);
+  /* height: calc(100vh - 140px); */
   overflow: hidden;
 }
 

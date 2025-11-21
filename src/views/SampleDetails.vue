@@ -151,7 +151,7 @@ const normalizedSampleData = computed(() => {
 
 <style scoped>
 .sample-detail-page {
-  padding: 20px;
+  /* padding: 20px; */
   background-color: #f5f7fa;
   min-height: calc(100vh - 64px);
 }
@@ -160,7 +160,7 @@ const normalizedSampleData = computed(() => {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .detail-card {

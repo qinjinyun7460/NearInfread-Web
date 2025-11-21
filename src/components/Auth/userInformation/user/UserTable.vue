@@ -1,6 +1,6 @@
 <template>
   <el-card shadow="never" class="table-card">
-    <el-table :data="userList" border stripe :loading="loading" style="width: 100%">
+    <el-table :data="userList" border stripe :loading="loading" style="width: 100%" max-height="700">
       <el-table-column label="用户ID" prop="user_id" align="center" sortable />
       <el-table-column label="用户名" prop="user_name" align="center" />
       <el-table-column label="手机号" prop="tel" align="center" />
