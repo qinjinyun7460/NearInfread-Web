@@ -14,14 +14,21 @@
         </el-sub-menu>
         <el-menu-item index="/samples" class="text">样品数据</el-menu-item>
 
-        <el-memu-item index="">检测记录</el-memu-item>
+
+        <el-sub-menu index="/SampleRecords">
+          <template #title><span class="text">样品记录管理</span></template>
+          <el-menu-item index="/SampleRecords/sample">列表</el-menu-item>
+          <el-menu-item index="/SampleRecords/sample/add">添加</el-menu-item>
+          <el-menu-item index="/SampleRecords/sample/edit/:id">编辑</el-menu-item>
+          <el-menu-item index="/SampleRecords/sample/:id">详情</el-menu-item>
+        </el-sub-menu>
+
 
         <el-sub-menu index="/settings">
           <template #title><span class="text">设置</span></template>
           <el-menu-item index="/settings/personal">修改信息</el-menu-item>
           <el-menu-item index="/settings/security">重置密码</el-menu-item>
           <el-menu-item index="/settings/cancel">注销账号</el-menu-item>
-
         </el-sub-menu>
 
       </el-menu>

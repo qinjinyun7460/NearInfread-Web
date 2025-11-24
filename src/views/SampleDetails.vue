@@ -48,6 +48,18 @@
           </div>
         </div>
       </el-card>
+
+
+      <el-card shadow="never" class="records-card" style="margin-top: 20px;">
+        <template #header>
+          <div class="card-header">检测记录历史</div>
+          <el-button type="primary" size="small" @click="handleAddNewDetect">
+            重新检测
+          </el-button>
+        </template>
+        <SampleRecords :sample-id="sample.sample_id" :sample-name="sample.sample_name" />
+      </el-card>
+
     </el-card>
 
     <div v-else-if="!sample || userMap.size === 0" class="loading-tip">加载中...</div>
@@ -84,6 +96,7 @@ const loading = ref(true);
 
 
 import { getUserList } from './user/user_api';
+import SampleRecords from './SampleRecords.vue';
 
 const userList = ref([]);
 const userMap = computed(() => {
@@ -123,6 +136,16 @@ const fetchSampleData = async () => {
   );
 };
 
+
+
+// 新增检测记录的方法
+const handleAddNewDetect = () => {
+  // 跳转到检测页面或打开检测弹窗
+  router.push({
+    path: `/samples/${sample.value.sample_id}/detect`,
+    query: { sampleName: sample.value.sample_name }
+  });
+};
 
 onMounted(async () => {
   loading.value = true;

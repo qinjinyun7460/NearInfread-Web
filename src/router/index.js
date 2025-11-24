@@ -6,7 +6,7 @@ import UserList from '@/components/Auth/userInformation/user/UserList.vue';
 import SampleDataViewCopy2 from '@/views/SampleDataView copy 2.vue';
 import SampleDetails from '@/views/SampleDetails.vue';
 import cancelAccount from '@/views/cancelAccount.vue';
-
+import SampleRecords from '@/views/SampleRecords.vue';
 
 
 // 路由规则
@@ -81,6 +81,14 @@ const routes = [
         component: SampleDetails,
         props: true,
         meta: { title: '详情' }
+      },
+
+      {
+        path: '/sample/records',
+        name: 'SampleRecords',
+        component: SampleRecords,
+        props: true,
+        meta: { title: '样品历史记录' }
       },
 
       {
