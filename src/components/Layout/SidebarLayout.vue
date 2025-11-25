@@ -15,13 +15,13 @@
         <el-menu-item index="/samples" class="text">样品数据</el-menu-item>
 
 
-        <el-sub-menu index="/SampleRecords">
+        <!-- <el-sub-menu index="/SampleRecords">
           <template #title><span class="text">样品记录管理</span></template>
           <el-menu-item index="/SampleRecords/sample">列表</el-menu-item>
           <el-menu-item index="/SampleRecords/sample/add">添加</el-menu-item>
           <el-menu-item index="/SampleRecords/sample/edit/:id">编辑</el-menu-item>
           <el-menu-item index="/SampleRecords/sample/:id">详情</el-menu-item>
-        </el-sub-menu>
+        </el-sub-menu> -->
 
 
         <el-sub-menu index="/settings">

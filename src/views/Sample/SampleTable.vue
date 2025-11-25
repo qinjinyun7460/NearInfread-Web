@@ -4,13 +4,11 @@
       @sort-change="handleSortChange" max-height="700" style="width: 100%">
       <el-table-column label="样品ID" prop="sample_id" align="center" sortable />
       <el-table-column label="用户ID" prop="user_id" align="center" sortable />
-
       <el-table-column label="用户名" prop="user_name" align="center" sortable />
-
       <el-table-column label="样品名称" prop="sample_name" align="center" />
       <el-table-column label="采样地点" prop="location" align="center" sortable />
-      <el-table-column label="采样时间" prop="detect_time" align="center" sortable>
-        <template #default="scope">{{ formatTime(scope.row.detect_time) }}</template>
+      <el-table-column label="采样时间" prop="sampling_time" align="center" sortable>
+        <template #default="scope">{{ formatTime(scope.row.sampling_time) }}</template>
       </el-table-column>
 
       <el-table-column label="是否已检测" prop="is_processed" align="center">

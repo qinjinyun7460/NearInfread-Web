@@ -1,4 +1,3 @@
-// 创建通用的图表工具函数（utils/chart.js）
 import * as echarts from 'echarts';
 
 export const useChart = (ref) => {
