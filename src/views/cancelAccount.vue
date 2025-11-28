@@ -3,11 +3,11 @@
 
     <el-card class="danger-zone">
       <template #header>
-        <div class="danger-title">危险操作</div>
+        <div class="danger-title">注销账号</div>
       </template>
       <div class="account-actions">
         <el-button type="danger" @click="handleAccountDeactivation" icon="Delete">
-          注销账号
+          注销
         </el-button>
         <p class="danger-hint">注销账号后，所有数据将不可恢复，请谨慎操作</p>
       </div>
@@ -59,12 +59,12 @@ const handleAccountDeactivation = () => {
 <style scoped>
 .danger-zone {
   border: 1px solid #f56c6c;
-  margin-top: 20px;
 }
 
 .danger-title {
   color: #f56c6c;
   font-weight: 500;
+  font-size: 16px;
 }
 
 .account-actions {

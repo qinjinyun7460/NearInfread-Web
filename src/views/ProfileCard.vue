@@ -1,7 +1,7 @@
 <template>
-  <el-card class="box-card profile-card">
+  <el-card class="profile-card">
     <template v-slot:header>
-      <div class="clearfix header-content">
+      <div class="header-content">
         <span>个人信息</span>
       </div>
     </template>
@@ -135,7 +135,6 @@ onMounted(() => {
   max-width: 50%;
 }
 
-/* 详细内容区域样式 */
 .detail-card {
   transition: all 0.3s ease;
 }
@@ -148,7 +147,6 @@ onMounted(() => {
   margin-top: 10px;
 }
 
-/* 响应式调整 */
 @media (max-width: 992px) {
 
   .profile-card-col,
@@ -173,7 +171,6 @@ onMounted(() => {
     margin-top: 5px;
     text-align: left;
     padding-left: 28px;
-    /* 与标签对齐 */
   }
 }
 </style>

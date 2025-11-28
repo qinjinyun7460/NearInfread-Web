@@ -27,16 +27,13 @@
 <script setup name="Profile">
 import { ref, onMounted, reactive } from 'vue';
 import { ElMessage, ElForm } from 'element-plus';
-import axios from 'axios';
 import { getUserInfo } from '@/utils/storage';
-
+import { editUser } from '../../user/user_api';
 
 const userInfo = ref({});
 
-const API_BASE = 'http://127.0.0.1:5000';
 const currentUserId = sessionStorage.getItem('current_user_id');
 
-// const editDialogVisible = ref(false);
 const editFormRef = ref(null);
 const editFormRules = reactive({
   tel: [
@@ -49,17 +46,7 @@ const editFormRules = reactive({
   ],
 });
 
-// // 接收父组件传递的初始用户信息
-// const props = defineProps({
-//   initialUser: {
-//     type: Object,
-//     required: true,
-//     default: () => ({})
-//   }
-// });
-
 onMounted(() => {
-  // userInfo.value = { ...props.initialUser };
   userInfo.value = getUserInfo()
 });
 
@@ -74,7 +61,7 @@ const submitEditForm = async () => {
   try {
     await editFormRef.value.validate();
 
-    const response = await axios.put(`${API_BASE}/api/user/${userInfo.value.user_id}`, userInfo.value, { params: { current_user_id: userInfo.value.user_id } });
+    const response = await editUser(userInfo.value.user_id, userInfo.value)
 
     if (response.data.success) {
       ElMessage.success('修改成功');
@@ -90,7 +77,6 @@ const submitEditForm = async () => {
 };
 
 const handleClose = () => {
-  // 1. 通知布局页关闭当前标签页
   emit('closeCurrentTab');
   emit('close');
 };

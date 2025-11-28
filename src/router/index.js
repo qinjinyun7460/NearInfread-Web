@@ -3,10 +3,10 @@ import { getUserInfo } from '@/utils/storage';
 import PersonalInfo from '@/views/PersonalCenter.vue';
 import PasswordReset from '@/views/resetPwd.vue';
 import UserList from '@/components/Auth/userInformation/user/UserList.vue';
-import SampleDataViewCopy2 from '@/views/SampleDataView copy 2.vue';
-import SampleDetails from '@/views/SampleDetails.vue';
+import SampleDataView from '@/views/SampleDataView.vue';
+import SampleDetails from '@/views/Sample/SampleDetails.vue';
 import cancelAccount from '@/views/cancelAccount.vue';
-import SampleRecords from '@/views/SampleRecords.vue';
+
 
 
 // 路由规则
@@ -42,7 +42,6 @@ const routes = [
         children: [
           {
             path: '/user_manage/list',
-            // component: () => import('@/views/UsersInformation.vue'),
             component: UserList,
             meta: { title: '用户列表' }
           },
@@ -57,8 +56,7 @@ const routes = [
 
       {
         path: '/samples',
-        // component: () => import('@/views/SampleDataView copy.vue'),
-        component: SampleDataViewCopy2,
+        component: SampleDataView,
         meta: { title: '样品数据' },
         // children: [
         //   {
@@ -72,7 +70,6 @@ const routes = [
         //     }
         //   }
         // ]
-
       },
 
       {
@@ -81,14 +78,6 @@ const routes = [
         component: SampleDetails,
         props: true,
         meta: { title: '详情' }
-      },
-
-      {
-        path: '/sample/records',
-        name: 'SampleRecords',
-        component: SampleRecords,
-        props: true,
-        meta: { title: '样品历史记录' }
       },
 
       {
@@ -122,24 +111,6 @@ const routes = [
             component: PasswordReset,
             meta: { title: '重置密码' }
           },
-          // {
-          //   path: 'list',
-          //   name: 'UserList',
-          //   component: UserList,
-          //   meta: { title: '用户列表' }
-          // },
-          // {
-          //   path: 'sample',
-          //   name: 'SampleList',
-          //   component: SampleDataViewCopy2,
-          //   meta: { title: '样品列表' }
-          // },
-          // {
-          //   path: 'details',
-          //   name: 'details',
-          //   component: SampleDetails,
-          //   meta: { title: '样品详情' }
-          // },
           {
             path: 'cancel',
             name: 'cancelAccount',

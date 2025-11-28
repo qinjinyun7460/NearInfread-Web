@@ -37,10 +37,7 @@
     <el-button type="primary" @click="handleAdd('save')">
       新增样品数据
     </el-button>
-
-    <!-- <el-button type="primary" @click="handleAdd('save/detect')" class="ml-2">
-      新增样品并检测
-    </el-button> -->
+    
   </el-card>
 </template>
 

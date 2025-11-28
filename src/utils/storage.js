@@ -19,8 +19,6 @@ export const getCurrentUserId = () => {
   return localUser ? JSON.parse(localUser) : sessionUser ? JSON.parse(sessionUser) : null;
 };
 
-
-
 // 清除用户信息
 export const removeUserInfo = () => {
   localStorage.removeItem('userInfo');

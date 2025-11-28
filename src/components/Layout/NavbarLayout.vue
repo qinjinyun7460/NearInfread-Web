@@ -1,43 +1,16 @@
 <template>
-  <!-- <nav class="navbar">
-    <div class="container">
-      <div class="navbar-logo"><a href="/" class="logo-text">System</a></div>
-
-      <div class="user-container" @click="toggleUserMenu">
-        <img :src="'https://picsum.photos/id/1005/40/40'" alt="用户头像" class="user-avatar">
-        <span class="user-name">{{ userInfo.user_name }}</span>
-        <i class="el-icon-arrow-down user-arrow" :class="{ rotate: showUserMenu }"></i>
-        <div class="user-dropdown" v-if="showUserMenu">
-          <a href="/profile" class="dropdown-item" @click="PersonalCenter">
-            <i class="el-icon-user"></i>
-            个人中心
-          </a>
-
-          <div class="dropdown-divider"></div>
-          <a href="javascript:;" class="dropdown-item logout-btn" @click="handleLogout">
-            <i class="el-icon-logout"></i>
-            退出登录
-          </a>
-        </div>
-      </div>
-    </div>
-  </nav> -->
-
-
   <el-header class="navbar" height="auto">
 
     <div class="container">
-      <el-breadcrumb separator="/">
+      <el-breadcrumb separator="/" class="breadcrumb">
         <el-breadcrumb-item v-for="(route, index) in $route.matched" :key="index" :to="null">
           {{ route.meta.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
-
-
       <el-dropdown @command="handleDropdownCommand" trigger="click" placement="bottom-end"
         @visible-change="handleMenuVisible">
         <div class="user-container" style="cursor: pointer;">
-          <el-avatar size="36" class="user-avatar">
+          <el-avatar class="user-avatar">
             <img src="https://picsum.photos/id/1005/40/40" alt="用户头像">
           </el-avatar>
           <span class="user-name">{{ userInfo.user_name || '' }}</span>
@@ -61,7 +34,6 @@
       </el-dropdown>
     </div>
   </el-header>
-
 </template>
 
 <script setup>
@@ -75,14 +47,12 @@ const router = useRouter();
 const showUserMenu = ref(false);
 const userInfo = ref({});
 
-
 const props = defineProps({
   parentUserInfo: {
     type: Object,
     default: () => ({})
   }
 });
-
 
 onMounted(() => {
   userInfo.value = getUserInfo() || props.userInfo;
@@ -99,8 +69,6 @@ onMounted(() => {
     document.removeEventListener('click', handleClickOutside);
   };
 });
-
-
 
 const handleLogout = async () => {
   try {
@@ -123,7 +91,6 @@ const handleLogout = async () => {
     if (userId) {
       await updateUserOnlineStatus(userId, false);
     }
-
   }
   catch (error) {
     if (error === 'cancel') {
@@ -133,7 +100,6 @@ const handleLogout = async () => {
     }
   }
 };
-
 
 const handleProfile = async () => {
 
@@ -147,38 +113,25 @@ const handleProfile = async () => {
     showUserMenu.value = false;
   }
 };
-
-
-
 </script>
-
 
 <style scoped>
 .navbar {
   background-color: #fff;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  padding: 12px 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .container {
   width: 100%;
   max-width: auto;
   margin: 0 0;
-  padding: 0 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.navbar-logo .logo-text {
-  font-size: 20px;
-  font-weight: 600;
-  color: #409eff;
-  text-decoration: none;
 }
 
 .navbar-menu {
@@ -187,6 +140,15 @@ const handleProfile = async () => {
   gap: 30px;
   margin: 0;
   padding: 0;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 16px;
 }
 
 .user-container {
@@ -213,9 +175,8 @@ const handleProfile = async () => {
 }
 
 .user-name {
-  font-size: 14px;
+  font-size: 16px;
   color: #303133;
-  white-space: nowrap;
 }
 
 .user-arrow {
@@ -264,12 +225,6 @@ const handleProfile = async () => {
   font-size: 16px;
   width: 20px;
   text-align: center;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background-color: #f5f5f5;
-  margin: 5px 0;
 }
 
 .logout-btn {

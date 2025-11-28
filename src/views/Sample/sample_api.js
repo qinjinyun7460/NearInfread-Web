@@ -14,3 +14,8 @@ export const detectSample = (params) => {
 export const saveSampleData = (params) => {
   return request.post('/api/save_sample_data', params);
 };
+
+// 获取样品检测记录
+export const getSampleDetectRecords = (sampleId)=>{
+  return request.get(`/api/samples/${sampleId}/detect-history`)
+};

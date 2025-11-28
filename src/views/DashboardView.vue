@@ -3,7 +3,6 @@
     <h1 class="welcome-title">欢迎来到该系统，{{ userInfo.user_name }}！</h1>
     <p class="welcome-desc">这里是系统首页，可快速查看数据统计</p>
   </el-card>
-
   <el-card class="features-section">
     <h2 class="section-title">数据统计</h2>
     <div class="dashboard-screen">
@@ -22,6 +21,7 @@
         </div>
       </el-header>
       <el-main class="screen-content">
+
         <div class="row row-1">
           <div class="card">
             <span class="card-title">{{ getPeriodText(dateRangeType) }}新增样品数量</span>
@@ -57,17 +57,45 @@
             </div>
           </div>
 
+          <div class="card chart-card ratio-chart-card">
+            <span class="card-title">新增样品占比</span>
+            <div class="card-body">
+              <div ref="ratioChart" class="chart-container"></div>
+              <div class="ratio-data">
+                <div class="ratio-percentage blue">{{ getRatioPercentage() }}%</div>
+                <div class="ratio-details">
+                  <span>新增: {{ stats_total.newSamples }}</span>
+                  <span>总计: {{ stats_total.totalSamples }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="card chart-card">
             <span class="card-title">检测完成趋势</span>
             <div class="card-body">
               <div ref="detectTrendChart" class="chart-container"></div>
             </div>
           </div>
+
+          <div class="card chart-card ratio-chart-card">
+            <span class="card-title">当前检测次数占比</span>
+            <div class="card-body">
+              <div ref="processedCountChart" class="chart-container"></div>
+              <div class="ratio-data">
+                <div class="ratio-percentage green">{{ getProcessedCountPercentage() }}%</div>
+                <div class="ratio-details">
+                  <span>当前检测次数: {{ stats_total.currentProcessedCount }}</span>
+                  <span>总计: {{ stats_total.totalProcessed }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="row row-pie">
           <div class="card chart-card">
-            <span class="card-title">样品状态分布</span>
+            <span class="card-title">样品检测状态分布</span>
             <div class="card-body">
               <div ref="statusChart" class="chart-container"></div>
             </div>
@@ -76,37 +104,6 @@
             <span class="card-title">采样地点分布</span>
             <div class="card-body">
               <div ref="locationChart" class="chart-container"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row row-1">
-          <div class="card">
-            <span class="card-title">全部样品数量</span>
-            <div class="card-body">
-              <div class="stat-value">{{ stats_total.totalSamples }}</div>
-            </div>
-          </div>
-          <div class="card">
-            <span class="card-title">累计检测总次数</span>
-            <div class="card-body">
-              <div class="stat-value">{{ stats_total.totalProcessed }}</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row row-pie">
-          <div class="card chart-card ratio-chart-card">
-            <span class="card-title">新增样品占比</span>
-            <div class="card-body">
-              <div ref="ratioChart" class="chart-container"></div>
-              <div class="ratio-data">
-                <div class="ratio-percentage">{{ getRatioPercentage() }}%</div>
-                <div class="ratio-details">
-                  <span>新增: {{ stats_total.newSamples }}</span>
-                  <span>总计: {{ stats_total.totalSamples }}</span>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -139,7 +136,7 @@ onMounted(() => {
 });
 
 // 日期范围选择
-const dateRangeType = ref('today');
+const dateRangeType = ref('week');
 const getPeriodText = (type) => {
   const periodMap = {
     'today': '今日',
@@ -175,6 +172,7 @@ const detectTrendChart = ref(null);
 const statusChart = ref(null);
 const locationChart = ref(null);
 const ratioChart = ref(null);
+const processedCountChart = ref(null)
 
 // 图表实例
 let sampleTrendInstance = null;
@@ -183,6 +181,7 @@ let statusInstance = null;
 let locationInstance = null;
 let efficiencyInstance = null;
 let ratioChartInstance = null;
+let ProcessedCountChartInstance = null;
 
 // 更新时间显示
 const updateTimeDisplay = () => {
@@ -279,7 +278,6 @@ const handleResize = () => {
   if (locationInstance) locationInstance.resize();
   if (efficiencyInstance) efficiencyInstance.resize();
   if (ratioChartInstance) ratioChartInstance.resize();
-  if (ratioChartInstance) ratioChartInstance.resize();
 };
 
 onMounted(() => {
@@ -318,17 +316,25 @@ watch(dateRangeType, () => {
 });
 
 // 计算新增样品占比百分比
-const getRatioPercentage = () => {
-  if (!stats_total.totalSamples || !stats_total.newSamples) return '0.00';
-  const percentage = (stats_total.newSamples / stats_total.totalSamples) * 100;
+const getProportion = (partial, total) => {
+  if (!total || !partial) return '0.00';
+  const percentage = (partial / total) * 100;
   return percentage.toFixed(2);
 };
+const getRatioPercentage = () => getProportion(stats_total.newSamples, stats_total.totalSamples);
+const getProcessedCountPercentage = () => getProportion(stats_total.currentProcessedCount, stats_total.totalProcessed);
+
 
 // 初始化环状图
 const initRatioChart = () => {
   if (ratioChart.value) {
     ratioChartInstance = echarts.init(ratioChart.value);
     updateRatioChart();
+  }
+  if (processedCountChart.value) {
+    ProcessedCountChartInstance = echarts.init(processedCountChart.value);
+    updateProcessedCountChart();
+
   }
 };
 
@@ -341,8 +347,8 @@ const updateRatioChart = () => {
     backgroundColor: 'transparent',
     legend: {
       orient: 'vertical',
-      top: 'center',
-      right: '10%',
+      top: '10%',
+      left: '10%',
       textStyle: {
         fontSize: 12
       },
@@ -391,6 +397,64 @@ const updateRatioChart = () => {
   ratioChartInstance.setOption(option);
 };
 
+const updateProcessedCountChart = () => {
+  const currentProcessed = stats_total.currentProcessedCount || 0;
+  const existingCurrentProcessed = Math.max(0, (stats_total.totalProcessed || 0) - currentProcessed);
+
+  const option = {
+    backgroundColor: 'transparent',
+    legend: {
+      orient: 'vertical',
+      top: '10%',
+      left: '10%',
+      textStyle: {
+        fontSize: 12
+      },
+      itemWidth: 10,
+      itemHeight: 10
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: ['60%', '80%'],
+        center: ['50%', '50%'],
+        silent: true,
+        label: {
+          show: false
+        },
+        labelLine: {
+          show: false
+        },
+        data: [
+          {
+            value: currentProcessed,
+            name: '当前检测次数',
+            itemStyle: {
+              color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: '#67C23A' },
+                { offset: 1, color: '#85CE61' }
+              ]),
+              borderRadius: 4
+            }
+          },
+          {
+            value: existingCurrentProcessed,
+            name: '其余检测次数',
+            itemStyle: {
+              color: '#ccc',
+              borderRadius: 4
+            }
+          }
+        ],
+        animationDuration: 1000,
+        animationEasing: 'cubicOut'
+      }
+    ]
+  };
+
+  ProcessedCountChartInstance.setOption(option);
+};
+
 // 监听数据变化更新图表
 watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
   if (ratioChartInstance) {
@@ -398,10 +462,15 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
   }
 });
 
+watch([() => stats_total.currentProcessedCount, () => stats_total.totalProcessed], () => {
+  if (ProcessedCountChartInstance) {
+    updateProcessedCountChart();
+  }
+})
+
 </script>
 
 <style scoped>
-/* 环状图卡片样式 */
 .ratio-chart-card {
   position: relative;
 }
@@ -421,7 +490,6 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
   left: 0;
 }
 
-/* 数据展示层 */
 .ratio-data {
   position: relative;
   z-index: 1;
@@ -431,8 +499,15 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 .ratio-percentage {
   font-size: 24px;
   font-weight: bold;
-  color: #409EFF;
   margin-bottom: 8px;
+}
+
+.blue {
+  color: #409EFF;
+}
+
+.green {
+  color: #67C23A;
 }
 
 .ratio-details {
@@ -462,7 +537,8 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 }
 
 .features-section {
-  padding: 40px 0;
+  height: 100%;
+  padding: 20px 0;
   background-color: #fff;
 }
 
@@ -494,6 +570,7 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 .dashboard-screen {
   width: 100%;
   height: 100vh;
+  /* height: 100%; */
   background: #fff;
   overflow: hidden;
   display: flex;
@@ -501,7 +578,7 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 }
 
 .screen-header {
-  padding: 15px 20px;
+  padding: 10px 20px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   justify-content: space-between;
@@ -523,14 +600,14 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 
 .screen-content {
   flex: 1;
-  padding: 20px;
+  padding: 10px 20px;
   overflow-y: auto;
 }
 
 .row {
   display: flex;
   gap: 20px;
-  margin-bottom: 20px;
+  padding: 10px;
   height: calc(25% - 15px);
 }
 
@@ -539,12 +616,11 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
 }
 
 .row-line {
-  height: 40%;
+  height: 35%;
 }
 
-/* .row-line, */
 .row-pie {
-  height: calc(50% - 15px);
+  height: calc(40% - 15px);
 }
 
 .card {
@@ -587,7 +663,6 @@ watch([() => stats_total.newSamples, () => stats_total.totalSamples], () => {
   font-size: 42px;
   font-weight: bold;
   text-align: center;
-  margin: 10px 0;
 }
 
 

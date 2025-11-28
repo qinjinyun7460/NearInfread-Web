@@ -1,7 +1,6 @@
 <template>
   <el-aside class="aside">
-    <el-row class="tac">
-
+    <el-row>
       <el-menu @open="handleOpen" @close="handleClose" @select="handleMenuSelect" :default-active="currentRoute">
         <el-menu-item>
           <div class="navbar-logo"><a class="logo-text">System</a></div>
@@ -14,23 +13,12 @@
         </el-sub-menu>
         <el-menu-item index="/samples" class="text">样品数据</el-menu-item>
 
-
-        <!-- <el-sub-menu index="/SampleRecords">
-          <template #title><span class="text">样品记录管理</span></template>
-          <el-menu-item index="/SampleRecords/sample">列表</el-menu-item>
-          <el-menu-item index="/SampleRecords/sample/add">添加</el-menu-item>
-          <el-menu-item index="/SampleRecords/sample/edit/:id">编辑</el-menu-item>
-          <el-menu-item index="/SampleRecords/sample/:id">详情</el-menu-item>
-        </el-sub-menu> -->
-
-
         <el-sub-menu index="/settings">
           <template #title><span class="text">设置</span></template>
           <el-menu-item index="/settings/personal">修改信息</el-menu-item>
           <el-menu-item index="/settings/security">重置密码</el-menu-item>
           <el-menu-item index="/settings/cancel">注销账号</el-menu-item>
         </el-sub-menu>
-
       </el-menu>
     </el-row>
   </el-aside>
@@ -68,25 +56,22 @@ watch(
 </script>
 
 <style scoped>
-/* Logo样式 */
 .navbar-logo .logo-text {
   font-size: 20px;
   font-weight: 600;
   color: #409eff;
-  /* 与登录页主色调统一 */
   text-decoration: none;
 }
 
 .aside {
   width: auto;
   background-color: #ffffff;
-  /* font-size: large; */
+  height: 100vh;
 }
 
 .aside .text {
   font-size: 16px;
 }
-
 
 @media (max-width: 768px) {
   .filter-form {

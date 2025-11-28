@@ -9,7 +9,7 @@
       @detect="handleDetectSample" />
 
     <!-- 表单弹窗 -->
-    <SampleForm v-model="formDialogVisible" :type="formType" @close="handleCloseForm" @submit="handleFormSubmit" />
+    <AddSampleForm v-model="formDialogVisible" :type="formType" @close="handleCloseForm" @submit="handleFormSubmit" />
   </div>
 </template>
 
@@ -19,10 +19,11 @@ import { ref, reactive, onMounted, computed } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import SampleFilter from './Sample/SampleFilter.vue';
 import SampleTable from './Sample/SampleTable.vue';
-import SampleForm from './Sample/SampleForm.vue';
-import { getSampleList, detectSample, saveSampleData } from './Sample/api';
+import AddSampleForm from './Sample/AddSampleForm.vue';
+import { getSampleList, detectSample, saveSampleData } from './Sample/sample_api';
 import { getUserList } from './user/user_api';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 // 表格数据
 const sampleList = ref([]);
@@ -32,8 +33,6 @@ const pagination = reactive({
   perPage: 10,
   total: 0
 });
-
-
 
 const userList = ref([]);
 const userMap = computed(() => {
@@ -50,12 +49,10 @@ const processedSampleList = computed(() => {
   }));
 });
 
-
 onMounted(() => {
   fetchUserData();
   loadSampleList();
 });
-
 
 const fetchUserData = async () => {
   try {
@@ -68,10 +65,6 @@ const fetchUserData = async () => {
   }
 };
 
-
-import { useRouter } from 'vue-router';
-const router = useRouter();
-
 const handleViewDetail = (row) => {
   router.push({
     name: 'SampleDetails',
@@ -82,13 +75,12 @@ const handleViewDetail = (row) => {
   });
 };
 
-
 // 筛选参数
 const searchParams = ref({});
 
 // 表单弹窗
 const formDialogVisible = ref(false);
-const formType = ref('save'); // save/detect
+const formType = ref('save');
 
 // 加载样品列表
 const loadSampleList = async () => {
@@ -178,48 +170,6 @@ const handleFormSubmit = async (data) => {
   }
 };
 
-// const handleFormSubmit = async (data) => {
-//   try {
-//     if (data.type === 'save') {
-//       // 仅保存样品
-//       const response = await saveSampleData({
-//         user_id: data.user_id || null,
-//         sample_name: data.sample_name,
-//         sample_data: data.sample_data,
-//         location: data.location || null
-//       });
-//       if (response.data.success) {
-//         ElMessage.success('保存成功');
-//         formDialogVisible.value = false;
-//         loadSampleList();
-//       } else {
-//         ElMessage.error('保存失败: ' + response.data.message);
-//       }
-//     }
-//     else {
-//       // 保存并检测
-//       const response = await detectSample({
-//         new_sample: {
-//           user_id: data.user_id || null,
-//           sample_name: data.sample_name,
-//           sample_data: data.sample_data,
-//           location: data.location || null
-//         }
-//       });
-//       if (response.data.success) {
-//         ElMessage.success('提交检测成功');
-//         formDialogVisible.value = false;
-//         loadSampleList();
-//       } else {
-//         ElMessage.error('提交失败: ' + response.data.message);
-//       }
-//     }
-//   } catch (error) {
-//     console.error('操作失败:', error);
-//     ElMessage.error('服务器错误，操作失败');
-//   }
-// };
-
 // 检测样品
 const handleDetectSample = async (row) => {
   const isReDetect = row.is_processed;
@@ -262,7 +212,6 @@ const handleDetectSample = async (row) => {
 
 <style scoped>
 .sample-list-container {
-  /* padding: 20px; */
   background-color: #f5f7fa;
   min-height: calc(100vh - 64px);
 }

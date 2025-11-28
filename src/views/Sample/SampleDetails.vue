@@ -9,9 +9,7 @@
       </el-button>
     </div>
 
-    <!-- <el-card class="detail-card" v-if="sample"> -->
     <el-card class="detail-card" v-if="sample && userMap.size > 0">
-      <!-- <el-descriptions title="样品详情" :column="3" border /> -->
       <el-descriptions title="样品详情" :column="4" :style="blockMargin">
         <el-descriptions-item label="样品ID">{{ sample.sample_id }}</el-descriptions-item>
         <el-descriptions-item label="样品名称">{{ sample.sample_name }}</el-descriptions-item>
@@ -62,9 +60,11 @@ import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft } from '@element-plus/icons-vue';
 import formatTime from '@/components/FormatTime';
-import { getSampleList } from './Sample/api';
+import { getSampleList } from './sample_api';
 import SpectrumChart from './SpectrumChart.vue';
-import SampleDataTable from './Sample/SampleDataTable.vue';
+import SampleDataTable from './SampleDataTable.vue';
+import SampleRecords from './SampleRecords.vue';
+import { getUserList } from '../user/user_api';
 
 
 const route = useRoute();
@@ -74,16 +74,11 @@ const sample = ref(null);
 
 const emit = defineEmits(['closeCurrentTab']);
 const handleClose = () => {
-  // router.back();
   emit('closeCurrentTab', route.fullPath);
   router.push('/samples');
 };
 
 const loading = ref(true);
-
-
-import { getUserList } from './user/user_api';
-import SampleRecords from './SampleRecords.vue';
 
 const userList = ref([]);
 const userMap = computed(() => {

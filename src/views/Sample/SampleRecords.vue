@@ -35,9 +35,8 @@
 <script setup>
 import { ref, reactive, watch, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
-import request from '@/utils/request';
 import formatTime from '@/components/FormatTime';
-import { detectSample } from './Sample/api';
+import { detectSample, getSampleDetectRecords } from './sample_api';
 
 
 const props = defineProps({
@@ -87,19 +86,7 @@ const getSampleRecords = async () => {
     try {
         tableLoading.value = true;
 
-        const currentUserId = sessionStorage.getItem('current_user_id');
-        if (!currentUserId) {
-            ElMessage.warning('请先登录');
-            tableLoading.value = false;
-            return;
-        }
-
-        const params = {
-            page: pagination.currentPage,
-            per_page: pagination.pageSize
-        };
-
-        const response = await request.get(`/api/samples/${props.sampleId}/detect-history`, { params });
+        const response = await getSampleDetectRecords(props.sampleId)
 
         if (response.data.success) {
             records.value = response.data.detect_records || response.data.data || [];
@@ -160,7 +147,7 @@ onMounted(() => {
     margin-top: 16px;
 }
 
-/* 适配小屏幕 */
+
 @media (max-width: 768px) {
     .el-table {
         font-size: 12px;

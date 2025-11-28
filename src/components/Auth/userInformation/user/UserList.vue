@@ -207,8 +207,8 @@ const handleCurrentChange = (val) => {
 
 <style scoped>
 .user-list-container {
-  /* padding: 20px; */
   background-color: #f5f7fa;
   min-height: calc(100vh - 64px);
+  /* height: 100%; */
 }
 </style>

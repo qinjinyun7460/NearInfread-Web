@@ -64,7 +64,7 @@
         <el-card>
           <el-tabs v-model="activeTab">
             <el-tab-pane label="修改资料" name="userinfo">
-              <EditInformation :initial-user="userInfo" @update:user="handleUserUpdate" />
+              <EditProfile :initial-user="userInfo" @update:user="handleUserUpdate" />
             </el-tab-pane>
           </el-tabs>
         </el-card>
@@ -77,7 +77,7 @@
 <script setup name="Profile">
 import { ref, onMounted } from 'vue';
 import { getUserInfo, setUserInfo } from '@/utils/storage';
-import EditInformation from './EditInformation.vue';
+import EditProfile from './Setting/Profile/EditProfile.vue';
 
 const showUserMenu = ref(false);
 const userInfo = ref({});
@@ -109,7 +109,6 @@ const handleUserUpdate = (updatedUser) => {
 
 <style scoped>
 .app-container {
-  /* padding: 20px; */
   background-color: #f5f7fa;
   min-height: calc(100vh - 60px);
 }

@@ -1,6 +1,5 @@
 import * as echarts from 'echarts';
 
-// 通用颜色配置
 export const CHART_COLORS = {
   primary: ['#409EFF', '#66B1FF'],      // 主色调（蓝色）
   success: ['#67C23A', '#85CE61'],      // 成功色（绿色）
@@ -15,30 +14,20 @@ export const CHART_COLORS = {
   background: 'transparent'              // 背景色
 };
 
-// 通用工具函数
 const getGradientColor = (colorPair, direction = 'vertical') => {
   const [startColor, endColor] = colorPair;
   return direction === 'vertical'
     ? new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-        { offset: 0, color: startColor },
-        { offset: 1, color: endColor }
-      ])
+      { offset: 0, color: startColor },
+      { offset: 1, color: endColor }
+    ])
     : new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-        { offset: 0, color: startColor },
-        { offset: 1, color: endColor }
-      ]);
+      { offset: 0, color: startColor },
+      { offset: 1, color: endColor }
+    ]);
 };
 
-// 通用图表配置生成器
 export class ChartTemplate {
-  /**
-   * 创建通用图表配置
-   * @param {Object} options - 自定义配置
-   * @param {string} options.type - 图表类型 (line, bar, pie)
-   * @param {Array} options.data - 图表数据
-   * @param {string} options.colorType - 颜色类型 (primary, success, etc.)
-   * @param {Object} options.customOptions - 自定义配置项
-   */
   static create(options = {}) {
     const {
       type = 'line',
@@ -49,7 +38,6 @@ export class ChartTemplate {
       showLegend = false
     } = options;
 
-    // 基础配置
     const baseConfig = {
       backgroundColor: CHART_COLORS.background,
       tooltip: showTooltip ? {
@@ -102,9 +90,8 @@ export class ChartTemplate {
       } : null
     };
 
-    // 根据类型设置系列配置
     let seriesConfig = [];
-    
+
     if (type === 'line') {
       seriesConfig = this.createLineSeries(data, colorType, customOptions);
     } else if (type === 'bar') {
@@ -120,12 +107,9 @@ export class ChartTemplate {
     };
   }
 
-  /**
-   * 创建折线图系列配置
-   */
   static createLineSeries(data, colorType, options) {
     const colorPair = CHART_COLORS[colorType] || CHART_COLORS.primary;
-    
+
     return [{
       data: data.map(item => item.count || item.value),
       type: 'line',
@@ -154,12 +138,9 @@ export class ChartTemplate {
     }];
   }
 
-  /**
-   * 创建柱状图系列配置
-   */
   static createBarSeries(data, colorType, options) {
     const colorPair = CHART_COLORS[colorType] || CHART_COLORS.primary;
-    
+
     return [{
       data: data.map(item => item.count || item.value),
       type: 'bar',
@@ -178,12 +159,9 @@ export class ChartTemplate {
     }];
   }
 
-  /**
-   * 创建饼图系列配置
-   */
   static createPieSeries(data, colorType, options) {
     const { radius = ['35%', '70%'], center = ['50%', '50%'] } = options;
-    
+
     return [{
       type: 'pie',
       radius,
@@ -222,18 +200,15 @@ export class ChartTemplate {
     }];
   }
 
-  /**
-   * 格式化饼图数据（添加颜色）
-   */
   static formatPieData(data) {
-    const colorTypes = Object.keys(CHART_COLORS).filter(key => 
+    const colorTypes = Object.keys(CHART_COLORS).filter(key =>
       Array.isArray(CHART_COLORS[key]) && CHART_COLORS[key].length === 2
     );
-    
+
     return data.map((item, index) => {
       const colorKey = colorTypes[index % colorTypes.length];
       const colorPair = CHART_COLORS[colorKey];
-      
+
       return {
         ...item,
         itemStyle: {
@@ -244,7 +219,6 @@ export class ChartTemplate {
   }
 }
 
-// 具体业务图表配置（基于通用模板）
 export const getSampleTrendOption = (data) => {
   return ChartTemplate.create({
     type: 'line',
@@ -313,7 +287,7 @@ export const getRatioOption = (newSamples, totalSamples) => {
     { name: '新增样品', value: newSamples },
     { name: '原有样品', value: Math.max(0, totalSamples - newSamples) }
   ];
-  
+
   return ChartTemplate.create({
     type: 'pie',
     data,

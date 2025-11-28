@@ -87,12 +87,8 @@ const pagination = reactive({
 const getUserLoginLogs = async () => {
   try {
     tableLoading.value = true;
-    // const isAdmin = ref(localStorage.getItem('is_admin') === 'true');
-
 
     const currentUserId = sessionStorage.getItem('current_user_id');
-    // if (!currentUserId && !isAdmin.value) {
-    // }
     if (!currentUserId) {
       ElMessage.warning('请先登录');
       tableLoading.value = false;
@@ -100,8 +96,6 @@ const getUserLoginLogs = async () => {
     }
 
     const params = {
-      // 普通用户：固定为当前用户ID；管理员：使用筛选框的user_id（可为空）
-      // user_id: isAdmin.value ? filterForm.user_id : currentUserId,
       current_user_id: currentUserId,
       user_name: filterForm.user_name,
       status: filterForm.status,
@@ -130,7 +124,6 @@ const getUserLoginLogs = async () => {
     tableLoading.value = false;
   }
 };
-
 
 
 const resetFilter = () => {
@@ -166,10 +159,8 @@ onMounted(() => {
 
 <style scoped>
 .user-list-container {
-  /* padding: 20px; */
   background-color: #f5f7fa;
   min-height: calc(100vh - 64px);
-  /* 适配导航栏高度 */
 }
 
 .page-header {
@@ -194,7 +185,6 @@ onMounted(() => {
   margin-top: 16px;
 }
 
-/* 适配小屏幕 */
 @media (max-width: 768px) {
   .filter-form {
     flex-direction: column;
