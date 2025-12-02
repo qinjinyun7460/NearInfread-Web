@@ -1,10 +1,10 @@
 <template>
   <el-card shadow="hover" class="filter-card mb-4">
     <el-form :inline="true" :model="filterForm" class="filter-form" @submit.prevent="handleSearch">
-      <el-form-item label="用户ID">
+      <!-- <el-form-item label="用户ID">
         <el-input v-model="filterForm.user_id" placeholder="请输入用户ID" clearable @clear="handleSearch"
           style="width: 200px" />
-      </el-form-item>
+      </el-form-item> -->
 
       <el-form-item label="用户名">
         <el-input v-model="filterForm.user_name" placeholder="请输入用户名称" clearable @clear="handleSearch"

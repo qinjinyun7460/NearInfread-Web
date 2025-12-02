@@ -1,26 +1,22 @@
 <template>
   <div class="auth-page">
-    <!-- 背景装饰 -->
     <div class="bg-pattern"></div>
 
-    <!-- 登录注册卡片 -->
     <div class="auth-card">
-      <!-- 标题区域 -->
       <div class="auth-header">
         <h2 class="title">{{ isLoginMode ? '账号登录' : '用户注册' }}</h2>
       </div>
 
-      <!-- 动态切换表单 -->
       <LoginForm v-if="isLoginMode" @loginSuccess="handleLoginSuccess" />
       <RegisterForm v-else @registerSuccess="toggleMode" />
 
-      <!-- 模式切换 -->
       <div class="mode-switch">
         <span>
           {{ isLoginMode ? '还没有账号?' : '已有账号?' }}
-          <el-link type="primary" @click="toggleMode" class="switch-link">
+          <el-link type="primary" @click="toggleMode">
             {{ isLoginMode ? '立即注册' : '立即登录' }}
           </el-link>
+
         </span>
       </div>
     </div>

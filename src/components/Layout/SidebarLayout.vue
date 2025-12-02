@@ -66,7 +66,7 @@ watch(
 .aside {
   width: auto;
   background-color: #ffffff;
-  height: 100vh;
+  /* min-height: 100vh; */
 }
 
 .aside .text {

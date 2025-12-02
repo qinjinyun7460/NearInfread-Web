@@ -3,7 +3,7 @@
     <h1 class="welcome-title">欢迎来到该系统，{{ userInfo.user_name }}！</h1>
     <p class="welcome-desc">这里是系统首页，可快速查看数据统计</p>
   </el-card>
-  <el-card class="features-section">
+  <el-card class="features-section" shadow="never">
     <h2 class="section-title">数据统计</h2>
     <div class="dashboard-screen">
       <el-header class="screen-header">

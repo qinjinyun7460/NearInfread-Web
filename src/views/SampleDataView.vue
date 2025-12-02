@@ -1,14 +1,11 @@
 <template>
   <div class="sample-list-container">
-    <!-- 筛选组件 -->
     <SampleFilter @search="handleSearch" @reset="handleReset" @openDialog="handleOpenDialog" />
 
-    <!-- 表格组件 -->
     <SampleTable :sampleList="processedSampleList" :tableLoading="tableLoading" :pagination="pagination"
       @sizeChange="handleSizeChange" @currentChange="handleCurrentChange" @viewDetail="handleViewDetail"
       @detect="handleDetectSample" />
 
-    <!-- 表单弹窗 -->
     <AddSampleForm v-model="formDialogVisible" :type="formType" @close="handleCloseForm" @submit="handleFormSubmit" />
   </div>
 </template>
@@ -147,7 +144,6 @@ const handleCloseForm = () => {
   formDialogVisible.value = false;
 };
 
-
 // 表单提交
 const handleFormSubmit = async (data) => {
   try {
@@ -207,7 +203,6 @@ const handleDetectSample = async (row) => {
     tableLoading.value = false;
   }
 };
-
 </script>
 
 <style scoped>

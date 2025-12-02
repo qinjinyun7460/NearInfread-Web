@@ -8,9 +8,14 @@
             <el-button class="button-container" @click="handleDetectSample" type="primary" plain>样品检测</el-button>
 
             <el-table :data="records" border stripe :loading="tableLoading" style="width: 100%" max-height="600">
-                <el-table-column label="检测记录ID" prop="id" align="center" />
+                <el-table-column width="80" label="序号" align="center">
+                    <template #default="scope">
+                        {{ (pagination.currentPage - 1) * pagination.pageSize + scope.$index + 1 }}
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column label="检测记录ID" prop="id" align="center" /> -->
                 <el-table-column label="样品ID" prop="sample_id" align="center" />
-                <el-table-column label="检测人ID" prop="detector_id" align="center" sortable />
+                <!-- <el-table-column label="检测人ID" prop="detector_id" align="center" sortable /> -->
                 <el-table-column label="检测人名称" prop="detector_name" align="center" />
                 <el-table-column label="检测时间" prop="detect_time" align="center">
                     <template #default="scope">

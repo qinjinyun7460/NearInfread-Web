@@ -1,28 +1,28 @@
 <template>
-  <div class="home-page">
+  <el-container class="layout-container-demo">
+    <Sidebar />
 
     <el-container>
-      <el-affix :offset="0">
-        <Sidebar />
-      </el-affix>
-
-      <el-main>
-        <Navbar />
-        <div class="tabs-container">
-          <el-tabs v-model="activeTab" type="card" closable @tab-remove="handleTabRemove" @tab-click="handleTabClick"
-            class="page-tabs">
-            <el-tab-pane v-for="tab in tabList" :key="tab.path" :label="tab.title" :name="tab.path"
-              :closable="tab.path !== '/'">
-              <keep-alive>
-                <router-view :key="tab.path" @closeCurrentTab="handleRemoveCurrentTab" />
-
-              </keep-alive>
-            </el-tab-pane>
-          </el-tabs>
+      <el-header>
+        <div class="toolbar">
+          <Navbar />
         </div>
+      </el-header>
+      <el-main>
+        <el-tabs v-model="activeTab" type="border-card" closable @tab-remove="handleTabRemove"
+          @tab-click="handleTabClick">
+          <el-tab-pane v-for="tab in tabList" :key="tab.path" :label="tab.title" :name="tab.path"
+            :closable="tab.path !== '/'">
+            <router-view v-slot="{ Component }">
+              <keep-alive>
+                <component :is="Component" />
+              </keep-alive>
+            </router-view>
+          </el-tab-pane>
+        </el-tabs>
       </el-main>
     </el-container>
-  </div>
+  </el-container>
 </template>
 
 <script setup>
@@ -102,26 +102,25 @@ watch(
 </script>
 
 <style scoped>
-.home-page {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f7fa;
+.layout-container-demo .el-header {
+  width: 100%;
+  position: relative;
+  padding: 0;
 }
 
-.page-tabs {
-  overflow: hidden;
+.layout-container-demo .toolbar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }
 
-@media (max-width: 768px) {
-  .filter-form {
-    flex-direction: column;
-    align-items: flex-start !important;
-  }
+.layout-container-demo .el-main {
+  padding: 0;
+}
 
-  .filter-form .el-form-item {
-    margin-bottom: 12px;
-    width: 100%;
-  }
+.layout-container-demo .el-menu {
+  border-right: none;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <el-header class="navbar" height="auto">
+  <el-header>
 
     <div class="container">
       <el-breadcrumb separator="/" class="breadcrumb">
@@ -7,6 +7,7 @@
           {{ route.meta.title }}
         </el-breadcrumb-item>
       </el-breadcrumb>
+
       <el-dropdown @command="handleDropdownCommand" trigger="click" placement="bottom-end"
         @visible-change="handleMenuVisible">
         <div class="user-container" style="cursor: pointer;">
@@ -33,6 +34,7 @@
         </template>
       </el-dropdown>
     </div>
+
   </el-header>
 </template>
 
@@ -116,37 +118,18 @@ const handleProfile = async () => {
 </script>
 
 <style scoped>
-.navbar {
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  margin-bottom: 10px;
-}
-
 .container {
   width: 100%;
-  max-width: auto;
-  margin: 0 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.navbar-menu {
-  display: flex;
-  list-style: none;
-  gap: 30px;
-  margin: 0;
-  padding: 0;
 }
 
 .breadcrumb {
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 10px 10px;
   border-radius: 20px;
   font-size: 16px;
 }
@@ -234,12 +217,5 @@ const handleProfile = async () => {
 .logout-btn:hover {
   color: #f56c6c;
   background-color: #fef0f0;
-}
-
-@media (max-width: 768px) {
-  .navbar-menu {
-    display: none;
-    /* 移动端可替换为汉堡菜单 */
-  }
 }
 </style>

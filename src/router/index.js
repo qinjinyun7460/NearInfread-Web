@@ -2,10 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { getUserInfo } from '@/utils/storage';
 import PersonalInfo from '@/views/PersonalCenter.vue';
 import PasswordReset from '@/views/resetPwd.vue';
-import UserList from '@/components/Auth/userInformation/user/UserList.vue';
 import SampleDataView from '@/views/SampleDataView.vue';
 import SampleDetails from '@/views/Sample/SampleDetails.vue';
 import cancelAccount from '@/views/cancelAccount.vue';
+import UserList from '@/views/UserList.vue';
 
 
 
@@ -31,6 +31,7 @@ const routes = [
     children: [
       {
         path: '',
+        name: 'Dashboard',
         component: () => import('@/views/DashboardView.vue'),
         meta: { title: '首页' }
       },
