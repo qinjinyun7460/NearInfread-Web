@@ -1,17 +1,17 @@
 import * as echarts from 'echarts';
 
 export const CHART_COLORS = {
-  primary: ['#409EFF', '#66B1FF'],      // 主色调（蓝色）
-  success: ['#67C23A', '#85CE61'],      // 成功色（绿色）
-  warning: ['#E6A23C', '#F0B862'],      // 警告色（黄色）
-  danger: ['#F56C6C', '#F88888'],        // 危险色（红色）
-  purple: ['#9B87FE', '#B19FF9'],        // 紫色
-  orange: ['#FF7D00', '#FF9E40'],        // 橙色
-  gray: ['#8C8C8C', '#A6A6A6'],          // 灰色
-  pink: ['#FF5C87', '#FF85A6'],          // 粉色
-  text: '#ccc',                          // 文本颜色
-  grid: 'rgba(255, 255, 255, 0.1)',      // 网格线颜色
-  background: 'transparent'              // 背景色
+  primary: ['#409EFF', '#66B1FF'],
+  success: ['#67C23A', '#85CE61'],
+  warning: ['#E6A23C', '#F0B862'],
+  danger: ['#F56C6C', '#F88888'],
+  purple: ['#9B87FE', '#B19FF9'],
+  orange: ['#FF7D00', '#FF9E40'],
+  gray: ['#8C8C8C', '#A6A6A6'],
+  pink: ['#FF5C87', '#FF85A6'],
+  text: '#ccc',
+  grid: 'rgba(255, 255, 255, 0.1)',
+  background: 'transparent'
 };
 
 const getGradientColor = (colorPair, direction = 'vertical') => {

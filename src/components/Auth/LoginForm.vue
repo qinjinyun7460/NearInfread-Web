@@ -19,8 +19,8 @@
 
     <!-- 记住我 & 忘记密码 -->
     <div class="form-actions">
-      <el-checkbox v-model="loginForm.remember" size="small">记住我</el-checkbox>
-      <el-link type="primary" size="small" @click="handleForgot">忘记密码?</el-link>
+      <el-checkbox v-model="loginForm.remember">记住我</el-checkbox>
+      <!-- <el-link type="primary" size="small" @click="handleForgot">忘记密码?</el-link> -->
     </div>
 
     <!-- 登录按钮 -->
@@ -68,21 +68,11 @@ const loginRules = reactive({
   ]
 });
 
-const handleForgot = () => {
-  ElMessage.info('忘记密码功能待实现');
-};
-
 // 登录逻辑
 const handleLogin = async () => {
   try {
     await loginFormRef.value.validate();
     loginLoading.value = true;
-
-    // const params = {
-    //   password: loginForm.password,
-    //   captcha: loginForm.captcha.toLowerCase(),
-    //   captcha_uuid: loginForm.captcha_uuid
-    // };
 
     const params = {
       tel: loginForm.tel,

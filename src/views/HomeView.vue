@@ -123,4 +123,25 @@ watch(
 .layout-container-demo .el-menu {
   border-right: none;
 }
+
+/* 平板（≥768px） */
+@media (min-width: 768px) {
+  .sidebar {
+    display: block;
+    width: 30%;
+  }
+}
+
+/* 桌面（≥1024px） */
+@media (min-width: 1024px) {
+  .el-main {
+    width: 100%;
+  }
+}
+
+@media(max-width:768px) {
+  .toolbar .el-main {
+    width: 80%;
+  }
+}
 </style>

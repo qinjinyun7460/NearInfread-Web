@@ -6,25 +6,29 @@
         clearable></el-input>
     </el-form-item> -->
 
-    <!-- 账号输入 -->
-    <el-form-item prop="account">
+    <!-- <el-form-item prop="account">
       <el-input v-model="registerForm.account" placeholder="手机号或邮箱" prefix-icon="User" size="large"
         clearable></el-input>
+    </el-form-item> -->
+
+    <el-form-item prop="tel">
+      <el-input v-model="registerForm.tel" placeholder="手机号" prefix-icon="Cellphone" size="large" clearable></el-input>
     </el-form-item>
 
-    <!-- 密码输入 -->
+    <el-form-item prop="email">
+      <el-input v-model="registerForm.email" placeholder="邮箱" prefix-icon="Message" size="large" clearable></el-input>
+    </el-form-item>
+
     <el-form-item prop="password">
       <el-input v-model="registerForm.password" type="password" placeholder="设置密码（至少6位）" prefix-icon="Lock"
         show-password size="large" clearable></el-input>
     </el-form-item>
 
-    <!-- 验证码（复用公共组件） -->
     <el-form-item prop="captcha">
       <Captcha :api-base="API_BASE" v-model:captchaUuid="registerForm.captcha_uuid"
         v-model:captchaValue="registerForm.captcha" />
     </el-form-item>
 
-    <!-- 注册按钮 -->
     <el-form-item>
       <el-button type="primary" @click="handleRegister" class="submit-btn" size="large" :loading="registerLoading">
         注册
@@ -34,9 +38,7 @@
 </template>
 
 <script setup>
-// import { ref, reactive, defineEmits } from 'vue';
 import { ref, reactive } from 'vue';
-
 import { ElMessage } from 'element-plus';
 import axios from 'axios';
 import Captcha from './CaptchaComponent.vue';
@@ -44,8 +46,6 @@ import Captcha from './CaptchaComponent.vue';
 
 // 向父组件传递注册成功事件（用于切换到登录模式）
 const emit = defineEmits(['registerSuccess']);
-
-// 常量与响应式数据
 const API_BASE = 'http://127.0.0.1:5000';
 const registerFormRef = ref(null);
 const registerLoading = ref(false);

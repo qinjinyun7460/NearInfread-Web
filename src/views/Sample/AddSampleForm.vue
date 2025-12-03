@@ -1,14 +1,8 @@
 <template>
   <el-dialog :title="dialogTitle" :visible="visible" width="700px" :before-close="handleClose">
-    <el-card class="mb-6" shadow="hover">
+    <el-card shadow="hover">
       <el-form ref="sampleForm" :model="formData" :rules="formRules" label-width="120px" class="mt-4">
         <el-row :gutter="20">
-          <el-col :span="12">
-            <el-form-item label="用户ID" prop="user_id">
-              <el-input v-model="formData.user_id" placeholder="请输入用户ID" clearable></el-input>
-            </el-form-item>
-          </el-col>
-
           <el-col :span="12">
             <el-form-item label="样品名称" prop="sample_name">
               <el-input v-model="formData.sample_name" placeholder="请输入样品名称" clearable required></el-input>
@@ -43,8 +37,9 @@
 </template>
 
 <script setup>
-import { defineProps, reactive, ref } from 'vue';
+import { reactive, ref } from 'vue';
 import { ElMessage } from 'element-plus';
+import { getCurrentUserId } from '@/utils/storage';
 
 const props = defineProps({
   visible: {
@@ -53,16 +48,18 @@ const props = defineProps({
   },
   type: {
     type: String,
-    default: 'save' // save/detect
+    default: 'save'
   }
 });
+
+const currentUserId = getCurrentUserId();
 
 const emit = defineEmits(['close', 'submit']);
 
 const sampleForm = ref(null);
 
 const formData = reactive({
-  user_id: '',
+  user_id: currentUserId,
   sample_name: '',
   sample_data: '',
   location: '',
@@ -78,18 +75,8 @@ const formRules = reactive({
   ]
 });
 
-// 动态标题和按钮文字
-
 const dialogTitle = ref('新增样品数据');
 const submitText = ref('保存');
-
-// const dialogTitle = ref('');
-// const submitText = ref('');
-
-// watch(() => props.type, (newVal) => {
-//   dialogTitle.value = newVal === 'save' ? '新增样品数据' : '新增样品并检测';
-//   submitText.value = newVal === 'save' ? '保存' : '提交检测并保存';
-// }, { immediate: true });
 
 const handleSubmit = async () => {
   try {

@@ -10,7 +10,8 @@
         <div class="header-left">
           <span>数据更新时间：{{ lastUpdateTime }}</span>
         </div>
-        <div class="header-right">
+        <!-- <div class="header-right">
+          <el-date-picker v-model="dateRangeType" size="small" placeholder="选择日期" />
           <el-select v-model="dateRangeType" @change="fetchDashboardDataTotal" size="small" class="date-range-select">
             <el-option label="今日" value="today" />
             <el-option label="本周" value="week" />
@@ -18,7 +19,23 @@
             <el-option label="全年" value="year" />
           </el-select>
           <el-button @click="refreshData" icon="Refresh" size="small">刷新</el-button>
+        </div> -->
+
+        <div class="header-right">
+          <el-date-picker v-if="dateRangeType === 'custom'" v-model="customDateRange" type="daterange"
+            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" format="YYYY-MM-DD"
+            value-format="YYYY-MM-DD" size="small" @change="handleCustomDateChange" class="custom-date-picker" />
+
+          <el-select v-model="dateRangeType" @change="handleRangeTypeChange" size="small" class="date-range-select">
+            <el-option label="今日" value="today" />
+            <el-option label="本周" value="week" />
+            <el-option label="本月" value="month" />
+            <el-option label="全年" value="year" />
+            <el-option label="自定义日期" value="custom" />
+          </el-select>
+          <el-button @click="refreshData" icon="Refresh" size="small">刷新</el-button>
         </div>
+
       </el-header>
       <el-main class="screen-content">
 
@@ -95,13 +112,13 @@
 
         <div class="row row-pie">
           <div class="card chart-card">
-            <span class="card-title">样品检测状态分布</span>
+            <span class="card-title">{{ getPeriodText(dateRangeType) }}样品检测状态分布</span>
             <div class="card-body">
               <div ref="statusChart" class="chart-container"></div>
             </div>
           </div>
           <div class="card chart-card">
-            <span class="card-title">采样地点分布</span>
+            <span class="card-title">{{ getPeriodText(dateRangeType) }}采样地点分布</span>
             <div class="card-body">
               <div ref="locationChart" class="chart-container"></div>
             </div>
@@ -135,17 +152,56 @@ onMounted(() => {
   }
 });
 
-// 日期范围选择
-const dateRangeType = ref('week');
+// // 日期范围选择
+// const dateRangeType = ref('today');
+// const getPeriodText = (type) => {
+//   const periodMap = {
+//     'today': '今日',
+//     'week': '本周',
+//     'month': '本月',
+//     'year': '全年'
+//   };
+//   return periodMap[type] || '今日';
+// };
+
+
+
+const dateRangeType = ref('today');
+const customDateRange = ref([]);
 const getPeriodText = (type) => {
   const periodMap = {
     'today': '今日',
     'week': '本周',
     'month': '本月',
-    'year': '全年'
+    'year': '全年',
+    'custom': customDateRange.value.length
+      ? `${customDateRange.value[0]} 至 ${customDateRange.value[1]}`
+      : '自定义日期'
   };
   return periodMap[type] || '今日';
 };
+
+const handleRangeTypeChange = (type) => {
+  if (type !== 'custom') {
+    customDateRange.value = [];
+  }
+  if (type !== 'custom') {
+    fetchDashboardDataTotal();
+  }
+};
+
+const handleCustomDateChange = (value) => {
+  if (value && value.length === 2) {
+    const [start, end] = value;
+    if (new Date(start) > new Date(end)) {
+      ElMessage.warning('结束日期不能早于开始日期');
+      customDateRange.value = [];
+      return;
+    }
+    fetchDashboardDataTotal();
+  }
+};
+
 
 // 统计数据
 const stats_total = reactive({
@@ -199,22 +255,53 @@ const updateTimeDisplay = () => {
   });
 };
 
+// const fetchDashboardDataTotal = async () => {
+//   try {
+//     const params = { range_type: dateRangeType.value };
+
+//     const response = await request.get('/api/dashboard/stats_total', { params });
+
+//     if (response.data.success) {
+//       const { summary, charts } = response.data.data;
+
+//       Object.assign(stats_total, summary);// 更新统计数据
+
+//       updateCharts(charts);
+
+//       const now = new Date();
+//       lastUpdateTime.value = now.toLocaleString('zh-CN');
+
+//     }
+//   } catch (error) {
+//     console.error('获取仪表盘数据失败:', error);
+//     ElMessage.error('获取数据失败，请刷新重试');
+//   }
+// };
+
 const fetchDashboardDataTotal = async () => {
   try {
-    const params = { range_type: dateRangeType.value };
+    const params = {};
 
+    if (dateRangeType.value === 'custom') {
+      if (!customDateRange.value.length) {
+        ElMessage.warning('请选择自定义日期范围');
+        return;
+      }
+      const [startDate, endDate] = customDateRange.value;
+      params.range_type = 'custom';
+      params.start_date = startDate;
+      params.end_date = endDate;
+    } else {
+      params.range_type = dateRangeType.value;
+    }
     const response = await request.get('/api/dashboard/stats_total', { params });
 
     if (response.data.success) {
       const { summary, charts } = response.data.data;
-
-      Object.assign(stats_total, summary);// 更新统计数据
-
+      Object.assign(stats_total, summary);
       updateCharts(charts);
-
       const now = new Date();
       lastUpdateTime.value = now.toLocaleString('zh-CN');
-
     }
   } catch (error) {
     console.error('获取仪表盘数据失败:', error);
@@ -294,9 +381,8 @@ onMounted(() => {
 
   initRatioChart();
   window.addEventListener('resize', () => {
-    if (ratioChartInstance) {
-      ratioChartInstance.resize();
-    }
+    if (ratioChartInstance) ratioChartInstance.resize();
+    if (ProcessedCountChartInstance) ProcessedCountChartInstance.resize();
   });
 });
 
@@ -311,8 +397,14 @@ onUnmounted(() => {
   if (ratioChartInstance) ratioChartInstance.dispose();
 });
 
+// watch(dateRangeType, () => {
+//   fetchDashboardDataTotal();
+// });
+
 watch(dateRangeType, () => {
-  fetchDashboardDataTotal();
+  if (dateRangeType.value !== 'custom') {
+    fetchDashboardDataTotal();
+  }
 });
 
 // 计算新增样品占比百分比
@@ -340,21 +432,22 @@ const initRatioChart = () => {
 
 // 更新环状图数据
 const updateRatioChart = () => {
+
   const newSamples = stats_total.newSamples || 0;
   const existingSamples = Math.max(0, (stats_total.totalSamples || 0) - newSamples);
 
   const option = {
     backgroundColor: 'transparent',
-    legend: {
-      orient: 'vertical',
-      top: '10%',
-      left: '10%',
-      textStyle: {
-        fontSize: 12
-      },
-      itemWidth: 10,
-      itemHeight: 10
-    },
+    // legend: {
+    //   orient: 'vertical',
+    //   top: '10%',
+    //   left: '10%',
+    //   textStyle: {
+    //     fontSize: 12
+    //   },
+    //   itemWidth: 10,
+    //   itemHeight: 10
+    // },
     series: [
       {
         type: 'pie',
@@ -394,6 +487,8 @@ const updateRatioChart = () => {
     ]
   };
 
+  // const option = getRatioOption(newSamples, existingSamples)
+
   ratioChartInstance.setOption(option);
 };
 
@@ -403,16 +498,16 @@ const updateProcessedCountChart = () => {
 
   const option = {
     backgroundColor: 'transparent',
-    legend: {
-      orient: 'vertical',
-      top: '10%',
-      left: '10%',
-      textStyle: {
-        fontSize: 12
-      },
-      itemWidth: 10,
-      itemHeight: 10
-    },
+    // legend: {
+    //   orient: 'vertical',
+    //   top: '10%',
+    //   left: '10%',
+    //   textStyle: {
+    //     fontSize: 12
+    //   },
+    //   itemWidth: 10,
+    //   itemHeight: 10
+    // },
     series: [
       {
         type: 'pie',
@@ -564,7 +659,7 @@ watch([() => stats_total.currentProcessedCount, () => stats_total.totalProcessed
 }
 
 .date-range-select {
-  min-width: 60px;
+  width: 100px;
 }
 
 .dashboard-screen {

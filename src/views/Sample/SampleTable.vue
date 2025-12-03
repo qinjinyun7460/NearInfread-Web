@@ -2,8 +2,12 @@
   <el-card shadow="hover" class="table-card">
     <el-table :data="sampleList" border stripe :loading="tableLoading" :empty-text="tableLoading ? '加载中...' : '暂无样品数据'"
       max-height="700" style="width: 100%">
-      <el-table-column label="样品ID" prop="sample_id" align="center" sortable />
-      <el-table-column label="用户ID" prop="user_id" align="center" sortable />
+      <el-table-column width="80" label="序号" align="center">
+        <template #default="scope">
+          {{ (pagination.currentPage - 1) * pagination.perPage + scope.$index + 1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="样品编号" prop="sample_number" align="center" />
       <el-table-column label="用户名" prop="user_name" align="center" />
       <el-table-column label="样品名称" prop="sample_name" align="center" />
       <el-table-column label="采样地点" prop="location" align="center" />
@@ -84,8 +88,6 @@ const props = defineProps({
       currentPage: 1,
       perPage: 10,
       total: 0
-
-
     })
   }
 });
